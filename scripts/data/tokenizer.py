@@ -59,7 +59,7 @@ class HFTokenizer:
     """
     def __init__(self, model_path) -> None:
         from transformers import AutoTokenizer
-        self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
+        self.tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True, cache_dir='/home/arthurvitoria/.tmp')
     
     def text_to_tokens(self, text: str) -> List[str]:
         tokens = self.tokenizer.tokenize(text)

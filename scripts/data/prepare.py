@@ -94,7 +94,6 @@ def main():
     
     random_seed = 42 + args.chunk_idx
 
-    
     try:
         script = os.path.join(curr_folder, args.benchmark, f"{config['task']}.py")
         additional_args = " ".join([f"--{k} {v}" for k, v in config['args'].items()])
@@ -113,7 +112,7 @@ def main():
         {f"--pre_samples {pre_samples}" if config['task'] == 'qa' else ""} \
         --template "{config['template']}"
         """
-        print(command)
+        
         result = subprocess.run(command, 
                                 shell=True, 
                                 check=True, 

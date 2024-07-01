@@ -29,20 +29,25 @@ class HuggingFaceModel:
             model_kwargs = None
         else:
             model_kwargs = {"attn_implementation": "flash_attention_2"}
-        
-        try:
-            self.pipeline = pipeline(
-                "text-generation",
-                model=name_or_path,
-                tokenizer=self.tokenizer,
-                trust_remote_code=True,
-                device_map="auto",
-                torch_dtype=torch.bfloat16,
-                model_kwargs=model_kwargs,
-            )
-        except:
-            self.pipeline = None
-            self.model = AutoModelForCausalLM.from_pretrained(name_or_path, trust_remote_code=True, device_map="auto", torch_dtype=torch.bfloat16,)
+       
+        self.pipeline = None 
+        self.model = AutoModelForCausalLM.from_pretrained(name_or_path, trust_remote_code=True, device_map="auto", load_in_4bit=True, cache_dir='/home/arthurvitoria/.tmp')
+
+        #try:
+        #    print(f"trying to load pipeline...")
+        #    self.pipeline = pipeline(
+        #        "text-generation",
+        #        model=name_or_path,
+        #        tokenizer=self.tokenizer,
+        #        trust_remote_code=True,
+        #        device_map="auto",
+        #        load_in_4bit=True, 
+        #        cache_dir='/home/arthurvitoria/.tmp',
+        #        model_kwargs=model_kwargs,
+        #    )
+        #except:
+        #    print(f"trying to load model...")
+        #    self.pipeline = None
             
         self.generation_kwargs = generation_kwargs
         self.stop = self.generation_kwargs.pop('stop')
@@ -64,7 +69,7 @@ class HuggingFaceModel:
         if generated_text.startswith(prompt):
             generated_text = generated_text[len(prompt) :]
                 
-        if self.stop is not None:
+       # if self.stop is not None:
             for s in self.stop:
                 generated_text = generated_text.split(s)[0]
         return {'text': [generated_text]}

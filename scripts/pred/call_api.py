@@ -148,6 +148,7 @@ def get_llm(tokens_to_generate):
         )
         
     elif args.server_type == 'hf':
+        print(f"loading a hf model...")
         from model_wrappers import HuggingFaceModel
         llm = HuggingFaceModel(
             name_or_path=args.model_name_or_path,
@@ -220,7 +221,7 @@ def main():
 
     # Load api
     llm = get_llm(config['tokens_to_generate'])
-    
+
     def get_output(idx, index, input, outputs, others, truncation, length):
         while True:
             try:
